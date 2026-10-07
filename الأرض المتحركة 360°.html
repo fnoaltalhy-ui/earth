@@ -1,0 +1,207 @@
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>الأرض المتحركة 360°</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700;800&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#0c0b0a;--ink:#f2ead8;--lava:#ff6a2b;--ice:#8fb0c4;--dim:#a39a8b;--card:#17140f;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*{box-sizing:border-box}
+body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:Tajawal,Tahoma,sans-serif;overflow:hidden}
+#app{height:100%;display:flex;flex-direction:column}
+#top{padding:10px 14px 6px;display:none}
+#bar{height:2px;background:#2a2620}#bar i{display:block;height:100%;width:0;background:var(--lava);transition:width .8s}
+#tl{display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:var(--dim)}
+#tl span{flex:1;text-align:center;opacity:.45}#tl span.on{opacity:1;color:var(--ink)}#tl b{display:block;font-size:15px;color:var(--lava)}
+#tl em{font-style:normal;display:none}#tl span.on em{display:block}
+main{flex:1;overflow-y:auto;position:relative}
+.st{display:none;min-height:100%;padding:18px 18px 90px;max-width:760px;margin:auto;animation:fi .9s}
+.st.on{display:block}
+@keyframes fi{from{opacity:0;transform:scale(1.03)}to{opacity:1;transform:none}}
+.big{font-size:84px;font-weight:800;line-height:1;color:var(--lava);opacity:.9;margin:0}
+h2{font-size:30px;margin:0 0 6px;font-weight:800}h3{font-size:19px;line-height:1.7;font-weight:700;margin:14px 0}
+p{color:var(--dim);line-height:1.9;margin:6px 0}
+.q{border-right:3px solid var(--lava);padding:6px 14px;color:var(--ink);font-size:18px;margin:16px 0}
+button{font-family:inherit;font-size:17px;color:var(--ink);background:#211d17;border:1px solid #3a342b;border-radius:4px;padding:13px 20px;min-height:48px;cursor:pointer}
+button.act{background:var(--lava);color:#1a0d06;border-color:var(--lava);font-weight:700}
+button.sel{border-color:var(--ice);color:var(--ice)}
+button:disabled{opacity:.4}
+button:focus-visible{outline:2px solid var(--ice)}
+#nav{position:absolute;bottom:0;left:0;right:0;padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));background:linear-gradient(transparent,var(--bg) 40%);display:none;justify-content:center}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.info{min-height:70px;background:var(--card);border:1px solid #2c2720;padding:12px 16px;line-height:1.8;margin-top:10px}
+svg,canvas{width:100%;height:auto;display:block;background:#0c0b0a}
+canvas{border:1px solid #2c2720}
+.hot,[data-i]{cursor:pointer}
+.spin{transform-origin:150px 150px;animation:sp 40s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
+.pulse{animation:pl 2.4s ease-in-out infinite}@keyframes pl{50%{opacity:.5}}
+.rise{animation:ri 3s linear infinite}@keyframes ri{from{transform:translateY(0);opacity:1}to{transform:translateY(-125px);opacity:0}}
+.fl,.fr{transition:transform 7s linear}.on .fl{transform:translateX(-28px)}.on .fr{transform:translateX(28px)}
+.cv{stroke-dasharray:6 8;fill:none;stroke:var(--lava);stroke-width:3;animation:da 1.2s linear infinite;opacity:.8}@keyframes da{to{stroke-dashoffset:-14}}
+.opts{display:grid;gap:10px}.opts button{text-align:right;line-height:1.6}
+.opts button.ok{border-color:#7fb08a;color:#a9d6b2}.opts button.no{border-color:#8a4a3a;color:#c98b79;text-decoration:line-through}
+.fb{min-height:30px;margin:10px 0;color:var(--ink);line-height:1.8}
+.qn{color:var(--dim);font-size:13px}
+.chip{display:inline-block;margin:4px 0}
+.slots div{border:1px dashed #3a342b;padding:9px 14px;margin:6px 0;color:var(--ice)}
+.shake{animation:sh .5s}@keyframes sh{20%{transform:translate(2px,1px)}40%{transform:translate(-2px,-1px)}60%{transform:translate(1px,2px)}80%{transform:translate(-1px,0)}}
+.bar2{height:8px;background:#2a2620;margin:10px 0}.bar2 i{display:block;height:100%;width:0;background:var(--lava);transition:width .4s}
+.foot{color:var(--dim);font-size:13px;text-align:center;line-height:1.9;margin-top:28px}
+/* intro */
+#s0,#s10{text-align:center;display:none;padding-top:7vh}
+#s0.on,#s10.on{display:block}
+.globe{width:min(54vw,250px);aspect-ratio:1;margin:0 auto 18px;border-radius:50%;position:relative;background:radial-gradient(circle at 32% 30%,#5d7384,#1d2a35 55%,#05080b 85%);box-shadow:0 0 70px rgba(255,106,43,.18),inset -20px -20px 50px #000;animation:gj 9s 3s 1}
+@keyframes gj{3%{transform:translate(1px,0)}6%{transform:translate(-1px,1px)}9%,100%{transform:none}}
+.globe svg{position:absolute;inset:0;background:none}
+.crk{fill:none;stroke:var(--lava);stroke-width:1.4;opacity:0;animation:ck 3s 3s forwards}@keyframes ck{to{opacity:.85}}
+.rv{opacity:0;animation:rv 1.6s forwards}@keyframes rv{to{opacity:1}}
+h1{font-size:46px;margin:0;font-weight:800}h1 span{display:block;font-size:30px;color:var(--lava);letter-spacing:6px;font-weight:300}
+#s10 .globe{animation:zo 6s ease-out forwards}@keyframes zo{from{transform:scale(7);opacity:.3}to{transform:none;opacity:1}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01s!important;transition:none!important}}
+</style></head><body>
+<div id="app">
+<div id="top"><div id="bar"><i></i></div><div id="tl"></div></div>
+<main>
+<section class="st on" id="s0">
+ <div class="globe"><svg viewBox="0 0 100 100"><path class="crk" d="M30 40l12 8-4 12 14 6M60 30l-6 14 10 6-3 14"/><path class="crk" d="M44 70l-8 10M70 56l10 6"/></svg></div>
+ <h1 class="rv" style="animation-delay:1s">الأرض المتحركة<span>360°</span></h1>
+ <p class="rv" style="animation-delay:2.6s;color:var(--ink);font-size:18px">رحلة إلى القوى الخفية تحت أقدامنا</p>
+ <div class="q rv" style="animation-delay:4.4s;display:inline-block;border:0;font-size:21px">«تبدو الأرض ثابتة… فهل هي فعلًا كذلك؟»</div><br>
+ <button class="act rv" style="animation-delay:6s" onclick="go(1)">ابدئي الرحلة</button>
+ <div class="foot rv" style="animation-delay:6.5s">الابتدائية والمتوسطة الأولى بصخيبرة – قطاع الحناكية<br>إعداد: أ. أفنان الطلحي</div>
+</section>
+
+<section class="st" id="s1"><p class="big">01</p><h2>تحت أقدامنا</h2><p>اضغطي على كل طبقة لتكتشفيها.</p>
+<svg viewBox="0 0 300 300" style="max-width:340px;margin:auto"><circle data-g="1" data-k="c" data-t="i1" data-i="القشرة: الطبقة الصلبة الرقيقة التي نعيش عليها." cx="150" cy="150" r="140" fill="#6b5a49"/><circle data-g="1" data-k="m" data-t="i1" data-i="الوشاح: أكبر الطبقات، صخور شديدة الحرارة تتحرك ببطء شديد." cx="150" cy="150" r="126" fill="#a8391a"/><circle class="spin" cx="150" cy="150" r="100" fill="none" stroke="#ff9a5a" stroke-width="2" stroke-dasharray="14 18" style="pointer-events:none"/><circle data-g="1" data-k="o" data-t="i1" data-i="اللب الخارجي: طبقة سائلة شديدة الحرارة." cx="150" cy="150" r="76" fill="#ff7a30"/><circle data-g="1" data-k="n" data-t="i1" data-i="اللب الداخلي: كرة صلبة رغم الحرارة الهائلة بسبب الضغط." cx="150" cy="150" r="34" fill="#ffd98a"/></svg>
+<div class="info" id="i1">باطن الأرض ليس ساكنًا…</div>
+<div class="q" id="q1" style="display:none">إذا كانت المواد في باطن الأرض تتحرك… فماذا يمكن أن يحدث للقشرة فوقها؟</div></section>
+
+<section class="st" id="s2"><p class="big">02</p><h2>الصفائح تتحرك</h2><p>القشرة وأعلى الوشاح مقسّمة إلى قطع ضخمة تسمى الصفائح الأرضية.</p>
+<svg id="cvs" viewBox="0 0 400 210"><defs><linearGradient id="mg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a2f12"/><stop offset="1" stop-color="#2a0f08"/></linearGradient></defs>
+<rect y="90" width="400" height="120" fill="url(#mg)"/>
+<rect class="fl" x="4" y="55" width="190" height="34" fill="#5f6d77"/><rect class="fr" x="206" y="55" width="190" height="34" fill="#6b5a49"/>
+<path class="cv" d="M100 100C60 120 60 170 100 190C140 170 140 120 100 100"/><path class="cv" d="M300 100C260 120 260 170 300 190C340 170 340 120 300 100"/></svg>
+<div class="row"><button class="act" onclick="cvs.classList.add('on');ok[2]=1;unl()">شغّلي الحركة</button></div>
+<div class="info">تيارات الحمل في الوشاح: المادة الساخنة تصعد والباردة تهبط، فتجرّ معها الصفائح ببطء.</div></section>
+
+<section class="st" id="s3"><p class="big">03</p><h2>مختبر حدود الصفائح</h2><p>اختاري نوع الحد، ثم حرّكي الصفائح بالشريط.</p>
+<div class="row" id="modes"><button data-m="div">متباعدة</button><button data-m="conv">متقاربة</button><button data-m="trans">جانبية</button></div>
+<canvas id="lab"></canvas><input id="rng" type="range" min="0" max="100" value="0" style="width:100%;margin:14px 0;accent-color:#ff6a2b;height:34px">
+<div class="info" id="i3">اختاري نوعًا لتبدأي.</div><h3 id="disc" style="color:var(--lava)"></h3></section>
+
+<section class="st" id="s4"><p class="big">04</p><h2>عندما تهتز الأرض</h2><p>الصفائح لا تتوقف عن الدفع، فيتراكم الإجهاد في الصخور.</p>
+<div class="bar2"><i id="stb"></i></div><canvas id="sk"></canvas>
+<div class="row"><button class="act" id="pr" onclick="push()">زيدي الإجهاد</button></div>
+<div class="info" id="i4">اضغطي حتى تنكسر الصخور.</div><div id="qz4"></div></section>
+
+<section class="st" id="s5"><p class="big">05</p><h2>عندما تصل الصهارة إلى السطح</h2><p>اضغطي على الدوائر لاستكشاف أجزاء البركان.</p>
+<svg viewBox="0 0 400 300"><defs><radialGradient id="lg"><stop offset="0" stop-color="#ffb26b"/><stop offset="1" stop-color="#c2380f"/></radialGradient></defs>
+<polygon points="0,300 0,205 120,205 188,112 212,112 280,205 400,205 400,300" fill="#3a312a"/>
+<ellipse class="pulse" cx="200" cy="258" rx="72" ry="30" fill="url(#lg)"/><rect x="195" y="112" width="10" height="148" fill="#e0561c"/>
+<path d="M200 112Q235 140 245 205" fill="none" stroke="#ff6a2b" stroke-width="5" class="pulse"/>
+<polygon points="184,112 216,112 208,120 192,120" fill="#1a1410"/>
+<ellipse cx="200" cy="72" rx="46" ry="22" fill="#4a4540" opacity=".7"/>
+<circle class="rise" cx="200" cy="240" r="4" fill="#ffd98a"/><circle class="rise" style="animation-delay:1.5s" cx="200" cy="240" r="4" fill="#ffd98a"/>
+<g fill="rgba(242,234,216,.12)" stroke="#f2ead8" stroke-width="1.5"><circle data-g="5" data-k="a" data-t="i5" data-i="غرفة الصهارة: خزان من الصخور المنصهرة تحت القشرة." cx="200" cy="258" r="12"/><circle data-g="5" data-k="b" data-t="i5" data-i="المدخنة (القناة): ممر تصعد منه الصهارة نحو السطح." cx="200" cy="175" r="12"/><circle data-g="5" data-k="c" data-t="i5" data-i="الفوهة: فتحة في قمة البركان تخرج منها المواد." cx="200" cy="112" r="12"/><circle data-g="5" data-k="d" data-t="i5" data-i="الحمم: الصهارة بعد خروجها إلى سطح الأرض." cx="244" cy="170" r="12"/><circle data-g="5" data-k="e" data-t="i5" data-i="الرماد والغازات: تنطلق مع الثوران وترتفع في الجو." cx="200" cy="72" r="12"/></g></svg>
+<div class="info" id="i5">…</div></section>
+
+<section class="st" id="s6"><p class="big">06</p><h2>الدليل الكبير</h2><p>شغّلي الطبقات وقارني بينها.</p>
+<svg id="map" viewBox="0 0 720 360"></svg>
+<div class="row"><button data-l="q">الزلازل</button><button data-l="v">البراكين</button></div>
+<div class="q">ماذا تلاحظين؟</div>
+<div class="row"><button class="act" id="rev" onclick="reveal()">اكشفي حدود الصفائح</button></div>
+<div class="info" id="i6">شغّلي الزلازل والبراكين أولًا.</div></section>
+
+<section class="st" id="s7"><p class="big">07</p><h2>مختبر الصفائح</h2><p>شاهدي الحركة ثم حلّلي.</p><div id="qz7"></div></section>
+<section class="st" id="s8"><p class="big">08</p><h2>تحدي عالمة الأرض</h2><div id="qz8"></div></section>
+<section class="st" id="s9"><p class="big">09</p><h2>المهمة النهائية</h2>
+<div class="q">الآن أصبحتِ تملكين الأدلة… هل تستطيعين تفسير ما يحدث تحت أقدامنا؟</div>
+<div id="ord"><p>رتّبي السلسلة السببية بالضغط على الحلقات بالترتيب الصحيح:</p><div id="chips"></div><div class="slots" id="slots"></div><div class="fb" id="ofb"></div></div>
+<div id="qz9"></div></section>
+
+<section class="st" id="s10"><div class="globe"><svg viewBox="0 0 100 100"><path class="crk" style="animation-delay:.5s" d="M30 40l12 8-4 12 14 6M60 30l-6 14 10 6-3 14"/></svg></div>
+<h2 class="rv" style="animation-delay:5s">اكتملت الرحلة 360°</h2>
+<p class="rv" style="animation-delay:5.6s;color:var(--ink);font-size:18px">الأرض التي بدت ساكنة… كانت تتحرك طوال الوقت.</p>
+<div class="rv" style="animation-delay:6.2s"><p style="font-size:42px;color:var(--lava);margin:8px 0" id="pct"></p><p id="sc"></p>
+<button class="act" onclick="location.reload()">أعيدي الرحلة</button></div>
+<div class="foot rv" style="animation-delay:6.6s">العلوم – الثالث المتوسط<br>الابتدائية والمتوسطة الأولى بصخيبرة – قطاع الحناكية<br>إعداد: أ. أفنان الطلحي</div></section>
+</main>
+<div id="nav"><button class="act" id="nx" onclick="go(cur+1)" disabled>المحطة التالية</button></div>
+</div>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const names=['باطن الأرض','الصفائح','الحدود','الزلازل','البراكين','الدليل','المختبر','التحدي','المهمة'];
+let cur=0,ok={},score=0,total=0,R=[],A=0,S=Array(140).fill(0),seen={},st=0;
+$('#tl').innerHTML=names.map((n,i)=>`<span><b>${String(i+1).padStart(2,'0')}</b><em>${n}</em></span>`).join('');
+function unl(){$('#nx').disabled=!ok[cur]}
+function go(n){cur=n;try{sessionStorage.setItem('c',n)}catch(e){}
+ $$('.st').forEach(s=>s.classList.remove('on'));$('#s'+n).classList.add('on');$('main').scrollTop=0;
+ $('#top').style.display=n>0&&n<10?'block':'none';$('#nav').style.display=n>0&&n<9?'flex':'none';
+ $('#bar i').style.width=(n/9*100)+'%';$$('#tl span').forEach((s,i)=>s.classList.toggle('on',i==n-1));
+ if(n==7){score=0;total=0}if(n==3)labInit();if(n==4)skInit();if(n==6)mapInit();if(n==7)qz7();if(n==8)qz8();if(n==9)ordInit();if(n==10)endInit();unl()}
+document.addEventListener('click',e=>{const h=e.target.closest('[data-i]');if(!h)return;$('#'+h.dataset.t).textContent=h.dataset.i;
+ const g=h.dataset.g;(seen[g]=seen[g]||new Set()).add(h.dataset.k);
+ if(g==1&&seen[1].size>=4){$('#q1').style.display='block';ok[1]=1;unl()}if(g==5&&seen[5].size>=5){ok[5]=1;unl()}});
+/* animation engine */
+function attach(c,mode,auto,get,h){c.width=600;c.height=h||300;R.push({c,mode,auto,get})}
+function loop(ts){R=R.filter(r=>r.c.isConnected);R.forEach(r=>{if(!r.c.offsetParent)return;draw(r.c.getContext('2d'),r.mode,r.auto?(Math.sin(ts/1500-1.6)+1)/2:r.get(),ts)});requestAnimationFrame(loop)}
+function ar(x,t,px,py){x.fillStyle='#f2ead8';x.font='26px sans-serif';x.fillText(t,px,py)}
+function draw(x,m,t,ts){x.shadowBlur=0;x.fillStyle='#0c0b0a';x.fillRect(0,0,600,x.canvas.height);
+ if(m=='seismo'){const H=x.canvas.height;S.push(A*Math.sin(ts/35)*(Math.random()*.6+.4)+(Math.random()-.5)*3);S.shift();A*=.985;x.strokeStyle='#8fb0c4';x.lineWidth=2;x.beginPath();S.forEach((v,i)=>x[i?'lineTo':'moveTo'](i*600/139,H/2+v));x.stroke();return}
+ if(m=='dots'){x.fillStyle='#8fb0c4';for(let i=0;i<70;i++){const u=i/70,r=Math.sin(i*91.7)*20;x.beginPath();x.arc(120+u*360+r,260-u*220+Math.cos(i*53.3)*20,3,0,7);x.fill()}for(let i=0;i<5;i++){x.beginPath();x.arc(60+i*110,60+(i%2)*160,3,0,7);x.fill()}return}
+ if(m=='trans'){x.save();if(t>.85)x.translate(Math.random()*4-2,Math.random()*4-2);const d=t*55;x.fillStyle='#5f6d77';x.fillRect(0,30-d,296,240);x.fillStyle='#6b5a49';x.fillRect(304,30+d,296,240);
+ x.strokeStyle='#f2ead8';x.setLineDash([10,8]);x.lineWidth=3;x.beginPath();x.moveTo(0,150-d);x.lineTo(296,150-d);x.moveTo(304,150+d);x.lineTo(600,150+d);x.stroke();x.setLineDash([]);ar(x,'▲',130,70);ar(x,'▼',440,250);x.restore();return}
+ let g=x.createLinearGradient(0,170,0,300);g.addColorStop(0,'#7a2a10');g.addColorStop(1,'#2a0f08');x.fillStyle=g;x.fillRect(0,170,600,130);
+ if(m=='div'){const L=290-t*75,Q=310+t*75;x.fillStyle='#ff6a2b';x.shadowColor='#ff6a2b';x.shadowBlur=22;x.fillRect(L,120,Q-L,60);x.shadowBlur=0;x.fillStyle='#5f6d77';x.fillRect(0,120,L,50);x.fillStyle='#6b5a49';x.fillRect(Q,120,600-Q,50);ar(x,'◀',60,110);ar(x,'▶',510,110)}
+ if(m=='conv'){x.fillStyle='#6b5a49';x.fillRect(330,95,270,45);if(t>.5){x.beginPath();x.moveTo(440,95);x.lineTo(480,95-120*(t-.5));x.lineTo(520,95);x.fill()}
+  x.strokeStyle='#5f6d77';x.lineWidth=22;x.lineJoin='round';x.beginPath();x.moveTo(0,150);x.lineTo(320,150);x.lineTo(320+t*170,150+t*120);x.stroke();
+  if(t>.5){x.strokeStyle='#ff6a2b';x.lineWidth=4;x.shadowColor='#ff6a2b';x.shadowBlur=16;x.beginPath();x.moveTo(320+t*145,150+t*100);x.lineTo(480,95-120*(t-.5));x.stroke()}ar(x,'▶',100,125)}}
+requestAnimationFrame(loop);
+/* 03 lab */
+const MT={div:['حد متباعد: تتباعد الصفيحتان، فيصعد الصهير ويتكوّن قشرة جديدة، وتحدث زلازل وبراكين.'],conv:['حد متقارب: تغوص الصفيحة المحيطية تحت القارية، فتتكوّن خنادق وبراكين وجبال وتحدث زلازل.'],trans:['حد جانبي: تنزلق الصفيحتان جنبًا إلى جنب فتتراكم إجهادات وتحدث زلازل قوية.']};
+let md='div',vis=new Set(),labDone=0;
+function labInit(){if(labDone)return;labDone=1;attach($('#lab'),'div',0,()=>$('#rng').value/100);
+ $$('#modes button').forEach(b=>b.onclick=()=>{md=b.dataset.m;R.find(r=>r.c.id=='lab').mode=md;$('#rng').value=0;$$('#modes button').forEach(x=>x.classList.toggle('sel',x==b));$('#i3').textContent='حرّكي الشريط لتحريك الصفائح.'});
+ $('#rng').oninput=e=>{if(e.target.value>70){$('#i3').textContent=MT[md][0];vis.add(md);if(vis.size==3){$('#disc').textContent='«بدأتِ تكتشفين السر…»';ok[3]=1;unl()}}}}
+/* 04 */
+function skInit(){if(!$('#sk').width||$('#sk').width==300)attach($('#sk'),'seismo',0,0,160)}
+function push(){st+=25;$('#stb').style.width=st+'%';if(st>=100){st=0;setTimeout(()=>{$('#stb').style.width='0';A=60;$('#app').classList.add('shake');setTimeout(()=>$('#app').classList.remove('shake'),500);
+ $('#i4').innerHTML='انطلقت الطاقة فجأة!<br>البؤرة: نقطة انطلاق الطاقة تحت السطح. المركز السطحي: النقطة التي فوقها على السطح. تنتشر الطاقة في موجات زلزالية يسجلها جهاز السيزموجراف.';
+ if(!$('#qz4').innerHTML)quiz('#qz4',[{q:'لماذا تكثر الزلازل في مناطق معينة من الأرض؟',o:['لأن الحدود بين الصفائح تتحرك وتتراكم عندها الإجهادات','لأن الغلاف الجوي أرق في تلك المناطق','لأن الشمس تسخّن تلك المناطق أكثر'],a:0,f:'الحركة عند حدود الصفائح هي مفتاح التفسير.'}],0,()=>{ok[4]=1;unl()})},350)}}
+/* quiz engine */
+function sh(a){a=a.map((v,i)=>[v,i]);for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a}
+function quiz(h,qs,cnt,done){let i=0;const el=$(h);(function show(){const q=qs[i];let first=1;
+ el.innerHTML=`<div class="qn">${i+1} / ${qs.length}</div>${q.vis?'<canvas class="vc"></canvas>':''}<h3>${q.q}</h3><div class="opts"></div><div class="fb"></div><button class="act" style="display:none">${i<qs.length-1?'التالي':'إنهاء'}</button>`;
+ if(q.vis)attach(el.querySelector('.vc'),q.vis,q.vis!='dots',0);
+ const ob=el.querySelector('.opts'),fb=el.querySelector('.fb'),nb=el.querySelector('.act');
+ sh(q.o).forEach(([t,k])=>{const b=document.createElement('button');b.textContent=t;b.onclick=()=>{if(k==q.a){b.classList.add('ok');fb.textContent='تحليل صحيح — '+q.f;if(first&&cnt)score++;if(first&&cnt)total++;ob.querySelectorAll('button').forEach(x=>x.disabled=1);nb.style.display='';nb.onclick=()=>{++i<qs.length?show():done()}}
+  else{b.classList.add('no');b.disabled=1;fb.textContent='راجعي حركة الصفائح وابحثي عن الدليل.';if(first&&cnt)total++;first=0}};ob.appendChild(b)})})()}
+function qz7(){quiz('#qz7',[
+ {vis:'div',q:'ما نوع الحد الذي تشاهدينه؟',o:['متباعد','متقارب','جانبي'],a:0,f:'الصفيحتان تبتعدان ويصعد الصهير بينهما.'},
+ {vis:'conv',q:'ماذا تتوقعين أن يتكوّن عند غوص الصفيحة المحيطية تحت القارية؟',o:['خندق وبراكين وزلازل','وادٍ صدعي جديد في المحيط','لا يحدث تغيير'],a:0,f:'الغوص يولّد صهيرًا يصعد فيكوّن براكين.'},
+ {vis:'trans',q:'ما نوع الحد الذي تشاهدينه؟',o:['متباعد','جانبي','متقارب'],a:1,f:'انزلاق جانبي يراكم الإجهاد ثم يطلقه زلزالًا.'}],1,()=>{ok[7]=1;unl();go(8)})}
+function qz8(){quiz('#qz8',[
+ {vis:'conv',q:'صفيحة محيطية تتحرك نحو صفيحة قارية. ما الأقرب للتكوّن قرب الحد؟',o:['خندق محيطي وسلسلة براكين','سهل ساحلي هادئ تمامًا','قشرة جديدة وسط البحر'],a:0,f:'التقارب يعني غوصًا وصهيرًا وزلازل.'},
+ {vis:'dots',q:'النقاط تمثل مواقع زلازل وبراكين على خريطة. أين يُحتمل أن يكون حد الصفائح؟',o:['على امتداد الشريط الذي تتجمع فيه النقاط','في وسط المنطقة الخالية','لا يمكن الاستدلال'],a:0,f:'النشاط يتركز قرب الحدود.'},
+ {q:'الدليل الأول: سلسلة براكين على حافة قارة. الدليل الثاني: خندق عميق بمحاذاتها. ما التفسير الأفضل؟',o:['صفيحة محيطية تغوص تحت الصفيحة القارية','صفيحتان تنزلقان جانبيًا','صفيحتان تتباعدان في وسط القارة'],a:0,f:'الخندق مع البراكين دليلا حد متقارب.'},
+ {q:'ما الذي يفسّر تغيّر مواقع القارات ببطء عبر الزمن؟',o:['حركة الصفائح بتأثير تيارات الحمل في الوشاح','دوران القمر حول الأرض','هبوب الرياح'],a:0,f:'تيارات الحمل تجرّ الصفائح.'}],1,()=>{ok[8]=1;unl();go(9)})}
+/* 06 map */
+const P=(l,a)=>[(l+180)*2,(90-a)*2],poly=(a)=>a.map(p=>P(...p).join(',')).join(' ');
+const CN=[[[-168,66],[-130,70],[-95,72],[-65,62],[-55,50],[-70,42],[-80,25],[-97,20],[-83,9],[-110,24],[-120,34],[-125,48],[-140,60],[-165,60]],[[-80,8],[-60,10],[-35,-5],[-40,-22],[-58,-38],[-68,-55],[-75,-45],[-72,-20],[-81,-5]],[[-10,36],[0,50],[10,58],[30,70],[80,73],[140,72],[180,66],[160,55],[142,45],[122,30],[110,20],[100,2],[90,22],[72,20],[58,24],[35,30],[28,37]],[[-17,21],[-10,35],[10,37],[32,31],[43,12],[51,11],[40,-15],[32,-28],[20,-35],[12,-18],[9,4],[-8,5]],[[113,-22],[130,-12],[143,-11],[153,-27],[146,-39],[130,-32],[115,-34]]];
+const BL=[[[-70,-55],[-72,-35],[-78,-10],[-80,5],[-92,14],[-105,19],[-118,33],[-125,40],[-130,50],[-150,60],[-165,55]],[[170,52],[155,50],[142,38],[140,30],[130,25],[125,15],[122,5],[130,-3],[150,-6],[165,-12],[178,-20],[175,-40]],[[-20,70],[-30,55],[-30,30],[-15,0],[-15,-20],[-10,-40],[0,-55]],[[-10,36],[10,38],[30,38],[45,35],[60,30],[75,33],[90,28],[95,20],[100,0],[110,-8]],[[38,15],[36,5],[33,-5],[34,-15]]];
+function pts(n,fn){let o='',k=0;BL.forEach((L,li)=>{if(!fn(li))return;for(let i=0;i<n;i++){const u=i/n*(L.length-1),a=L[u|0],b=L[Math.min((u|0)+1,L.length-1)],f=u%1,l=a[0]+(b[0]-a[0])*f+Math.sin(k*7.7)*2.5,t=a[1]+(b[1]-a[1])*f+Math.cos(k*5.3)*2.5;k++;const[x,y]=P(l,t);o+=`<circle cx="${x}" cy="${y}" r="${n>20?2:3}"/>`}});return o}
+function mapInit(){if($('#map').innerHTML)return;$('#map').innerHTML=`<g fill="#2b2822" stroke="#3a352c">${CN.map(c=>`<polygon points="${poly(c)}"/>`).join('')}</g><g id="gb" opacity="0" fill="none" stroke="#f2ead8" stroke-width="1.5" stroke-dasharray="5 4">${BL.map(l=>`<polyline points="${poly(l)}"/>`).join('')}<text x="40" y="215" fill="#ff6a2b" stroke="none" font-size="15">حزام النار</text></g><g id="gq" opacity="0" fill="#8fb0c4">${pts(26,i=>1)}</g><g id="gv" opacity="0" fill="#ff6a2b">${pts(7,i=>i!=3||0)}</g>`;
+ $$('[data-l]').forEach(b=>b.onclick=()=>{const g=$('#g'+b.dataset.l);const on=g.getAttribute('opacity')==0;g.setAttribute('opacity',on?1:0);b.classList.toggle('sel',on)})}
+function reveal(){if($('#gq').getAttribute('opacity')==0||$('#gv').getAttribute('opacity')==0){$('#i6').textContent='شغّلي الزلازل والبراكين معًا أولًا.';return}
+ $('#gb').setAttribute('opacity',1);$('#i6').innerHTML='معظم الزلازل والبراكين تتركز قرب حدود الصفائح، ويظهر حزام النار حول المحيط الهادئ.<br><b style="color:var(--ink)">﴿صُنْعَ اللَّهِ الَّذِي أَتْقَنَ كُلَّ شَيْءٍ﴾</b> — سورة النمل، الآية 88';ok[6]=1;unl()}
+/* 09 */
+const OR=['تتحرك تيارات الحمل في الوشاح','تتحرك الصفائح فوقها','تتفاعل الصفائح عند حدودها','يتراكم الإجهاد ويصعد الصهير','تحدث الزلازل والبراكين'];let oi=0,om=0;
+function ordInit(){if($('#chips').children.length)return;sh(OR).forEach(([t,k])=>{const b=document.createElement('button');b.className='chip';b.style.marginInlineEnd='8px';b.textContent=t;b.onclick=()=>{if(k==oi){b.disabled=1;$('#slots').insertAdjacentHTML('beforeend',`<div>${oi+1}. ${t}</div>`);$('#ofb').textContent='';if(++oi==5){total++;if(!om)score++;$('#ofb').textContent='تحليل صحيح — سلسلة كاملة من الحمل حتى الزلازل والبراكين.';setTimeout(fin,900)}}else{om=1;$('#ofb').textContent='راجعي السبب والنتيجة وحاولي مرة أخرى.'}};$('#chips').appendChild(b)})}
+function fin(){$('#ord').style.display='block';quiz('#qz9',[
+ {q:'ما الذي يسبب حركة الصفائح الأرضية؟',o:['تيارات الحمل في الوشاح','المد والجزر','دوران اللب الداخلي فقط'],a:0,f:'الحمل يجرّ الصفائح.'},
+ {q:'عند الحد المتباعد يصعد الصهير فيتكوّن:',o:['قشرة جديدة','خندق عميق','سلسلة جبال التواء فقط'],a:0,f:'الصهير يبرد ويضيف قشرة.'},
+ {q:'ينتج الزلزال عن:',o:['تحرر مفاجئ للطاقة المتراكمة في الصخور','ارتفاع حرارة الجو','سقوط الأمطار الغزيرة'],a:0,f:'الإجهاد المتراكم ينكسر فجأة.'},
+ {q:'أي حد تنزلق عنده صفيحتان جانبيًا؟',o:['الحد الجانبي','الحد المتباعد','الحد المتقارب'],a:0,f:'الانزلاق يولّد الزلازل.'},
+ {q:'أين تتركز معظم الزلازل والبراكين؟',o:['قرب حدود الصفائح','في مراكز الصفائح فقط','بشكل متساوٍ على الأرض'],a:0,f:'الحدود هي مناطق النشاط.'}],1,()=>go(10))}
+function endInit(){const p=total?Math.round(score/total*100):0;$('#pct').textContent=p+'%';$('#sc').textContent=`نسبة الإنجاز: ${score} من ${total} إجابة صحيحة من المحاولة الأولى`}
+try{const c=+sessionStorage.getItem('c');if(c>0&&c<10)go(Math.min(c,7))}catch(e){}
+</script></body></html>
